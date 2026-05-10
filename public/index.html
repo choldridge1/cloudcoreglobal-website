@@ -999,6 +999,263 @@
     color: rgba(255,255,255,0.3);
   }
 
+
+  /* ── YOUTUBE SECTION ── */
+  .youtube-bg {
+    background: var(--c-surface);
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .yt-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .yt-subscribe {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #FF0000;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .yt-subscribe:hover { opacity: 0.88; transform: translateY(-2px); }
+
+  /* Featured video */
+  .yt-featured {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 32px;
+    margin-bottom: 32px;
+    align-items: start;
+  }
+
+  .yt-embed-wrap {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--c-border);
+  }
+
+  .yt-embed-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+  }
+
+  .yt-featured-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .yt-featured-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #FF0000;
+  }
+
+  .yt-featured-title {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+  }
+
+  .yt-featured-desc {
+    font-size: 14px;
+    color: var(--c-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .yt-channel-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .yt-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .yt-stat-num {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--c-text);
+  }
+
+  .yt-stat-label {
+    font-size: 11px;
+    color: var(--c-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+
+  .yt-watch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid var(--c-border);
+    color: var(--c-text);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    align-self: flex-start;
+  }
+  .yt-watch-btn:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.05); }
+
+  /* Video grid */
+  .yt-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .yt-card {
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    text-decoration: none;
+    display: block;
+  }
+
+  .yt-card:hover {
+    border-color: rgba(255,0,0,0.3);
+    transform: translateY(-3px);
+  }
+
+  .yt-thumb {
+    position: relative;
+    padding-bottom: 56.25%;
+    background: #0a0a0a;
+    overflow: hidden;
+  }
+
+  .yt-thumb iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+    pointer-events: none;
+  }
+
+  .yt-thumb-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.2);
+    transition: background 0.2s;
+  }
+
+  .yt-card:hover .yt-thumb-overlay { background: rgba(0,0,0,0.05); }
+
+  .yt-play-btn {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,0,0,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+
+  .yt-card:hover .yt-play-btn { transform: scale(1.1); }
+
+  .yt-card-body {
+    padding: 16px 18px 18px;
+  }
+
+  .yt-card-topic {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #FF0000;
+    margin-bottom: 6px;
+  }
+
+  .yt-card-title {
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--c-text);
+    margin-bottom: 6px;
+  }
+
+  .yt-card-desc {
+    font-size: 12px;
+    color: var(--c-muted);
+    line-height: 1.6;
+  }
+
+  /* Topics strip */
+  .yt-topics {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 36px;
+    padding-top: 32px;
+    border-top: 1px solid var(--c-border);
+  }
+
+  .yt-topic-pill {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--c-border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--c-muted);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .yt-topic-pill:hover { border-color: rgba(255,0,0,0.4); color: var(--c-text); }
+
+  @media (max-width: 900px) {
+    .yt-featured { grid-template-columns: 1fr; }
+    .yt-grid { grid-template-columns: 1fr; }
+    .yt-header { flex-direction: column; align-items: flex-start; }
+  }
   /* ── UTILS ── */
   .text-accent { color: var(--c-accent); }
   .text-green { color: var(--c-green); }
@@ -1067,6 +1324,7 @@
     <li><a href="#approach">Approach</a></li>
     <li><a href="#industries">Industries</a></li>
     <li><a href="#results">Results</a></li>
+    <li><a href="#youtube">YouTube</a></li>
     <li><a href="#contact" class="nav-cta">Get Started</a></li>
   </ul>
 </nav>
@@ -1500,6 +1758,131 @@
   </div>
 </section>
 
+
+<!-- ── YOUTUBE ── -->
+<section class="section youtube-bg" id="youtube">
+  <div class="section-inner">
+
+    <div class="yt-header">
+      <div>
+        <div class="section-label">CloudCore on YouTube</div>
+        <h2 class="section-title">Learn Cloud. Build Better.<br>Watch Us Work.</h2>
+        <p class="section-desc" style="margin-top:12px;">Weekly Azure tutorials, DevOps deep-dives, Infrastructure-as-Code demos, and cloud cost optimization walkthroughs — straight from our engineers.</p>
+      </div>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew?sub_confirmation=1" target="_blank" rel="noopener" class="yt-subscribe">
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="white"><path d="M19.6 2.2A2.5 2.5 0 0017.8.4C16.3 0 10 0 10 0S3.7 0 2.2.4A2.5 2.5 0 00.4 2.2C0 3.7 0 7 0 7s0 3.3.4 4.8A2.5 2.5 0 002.2 13.6C3.7 14 10 14 10 14s6.3 0 7.8-.4a2.5 2.5 0 001.8-1.8C20 10.3 20 7 20 7s0-3.3-.4-4.8zM8 10V4l5.3 3L8 10z"/></svg>
+        Subscribe on YouTube
+      </a>
+    </div>
+
+    <!-- Featured Video -->
+    <div class="yt-featured fade-up">
+      <div class="yt-embed-wrap">
+        <iframe
+          src="https://www.youtube.com/embed?listType=user_uploads&list=UCd4ZHTniPSOgIv0hMkhV2ew&index=0&autoplay=0&rel=0&modestbranding=1"
+          title="CloudCore — Latest Video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <div class="yt-featured-info">
+        <div class="yt-featured-label">▶ Latest from the Channel</div>
+        <div class="yt-featured-title">Azure & CloudOps — Real-World Tutorials from CloudCore Engineers</div>
+        <div class="yt-featured-desc">Our team publishes weekly hands-on content covering the tools and techniques we use every day on enterprise cloud engagements — from Bicep templates to Azure Monitor and Defender configurations.</div>
+
+        <div class="yt-channel-stats">
+          <div class="yt-stat">
+            <div class="yt-stat-num">Weekly</div>
+            <div class="yt-stat-label">New Videos</div>
+          </div>
+          <div class="yt-stat">
+            <div class="yt-stat-num">Azure</div>
+            <div class="yt-stat-label">Primary Focus</div>
+          </div>
+          <div class="yt-stat">
+            <div class="yt-stat-num">IaC</div>
+            <div class="yt-stat-label">Bicep · Terraform</div>
+          </div>
+        </div>
+
+        <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-watch-btn">
+          View All Videos
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Video Grid — 3 topic cards with embedded previews -->
+    <div class="yt-grid">
+
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-card fade-up">
+        <div class="yt-thumb">
+          <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=UCd4ZHTniPSOgIv0hMkhV2ew&index=1&rel=0&modestbranding=1&controls=0" title="Infrastructure as Code" tabindex="-1" allowfullscreen></iframe>
+          <div class="yt-thumb-overlay">
+            <div class="yt-play-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="yt-card-body">
+          <div class="yt-card-topic">Infrastructure as Code</div>
+          <div class="yt-card-title">Bicep & Terraform Deep Dives</div>
+          <div class="yt-card-desc">Deploy repeatable, version-controlled Azure infrastructure with hands-on IaC walkthroughs.</div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-card fade-up" style="transition-delay:0.1s">
+        <div class="yt-thumb">
+          <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=UCd4ZHTniPSOgIv0hMkhV2ew&index=2&rel=0&modestbranding=1&controls=0" title="DevOps & CI/CD" tabindex="-1" allowfullscreen></iframe>
+          <div class="yt-thumb-overlay">
+            <div class="yt-play-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="yt-card-body">
+          <div class="yt-card-topic">DevOps & CI/CD</div>
+          <div class="yt-card-title">Azure DevOps Pipeline Tutorials</div>
+          <div class="yt-card-desc">End-to-end CI/CD pipeline builds using Azure DevOps, GitHub Actions, and GitOps workflows.</div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-card fade-up" style="transition-delay:0.2s">
+        <div class="yt-thumb">
+          <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=UCd4ZHTniPSOgIv0hMkhV2ew&index=3&rel=0&modestbranding=1&controls=0" title="Cloud Security" tabindex="-1" allowfullscreen></iframe>
+          <div class="yt-thumb-overlay">
+            <div class="yt-play-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="yt-card-body">
+          <div class="yt-card-topic">Security & Compliance</div>
+          <div class="yt-card-title">Azure Defender & Monitor Configs</div>
+          <div class="yt-card-desc">Practical security posture management, threat detection, and compliance automation on Azure.</div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Topic Pills -->
+    <div class="yt-topics">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-muted);align-self:center;margin-right:8px;">Topics:</span>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Azure Infrastructure</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Bicep Templates</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Terraform on Azure</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">CI/CD Pipelines</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Azure Monitor</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Cloud Security</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Cost Optimization</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">DevOps Best Practices</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">ARM Templates</a>
+    </div>
+
+  </div>
+</section>
+
 <!-- ── CONTACT ── -->
 <section class="section contact-bg" id="contact">
   <div class="section-inner">
@@ -1724,6 +2107,7 @@
         <ul>
           <li><a href="#approach">Our Approach</a></li>
           <li><a href="#results">Case Studies</a></li>
+          <li><a href="#youtube">YouTube Channel</a></li>
           <li><a href="#contact">Contact Us</a></li>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Service</a></li>
