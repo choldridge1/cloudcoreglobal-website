@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CloudCore Global Privacy Policy — how we collect, use, and protect your information.">
+<title>Privacy Policy | CloudCore Global</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --c-bg: #050A14;
+    --c-surface: #0C1524;
+    --c-surface2: #111D30;
+    --c-border: rgba(255,255,255,0.08);
+    --c-text: #E8EDF5;
+    --c-muted: #7A8DA8;
+    --c-accent: #00D4FF;
+    --c-accent2: #0057FF;
+    --c-green: #00E5A0;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --max: 800px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 72px;
+    background: rgba(5,10,20,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .nav-wordmark {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+  }
+  .nav-wordmark span { color: var(--c-accent); }
+
+  .nav-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--c-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--c-text); }
+
+  /* ── HERO ── */
+  .page-hero {
+    padding: 140px 40px 60px;
+    border-bottom: 1px solid var(--c-border);
+    background: var(--c-surface);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,87,255,0.1), transparent 70%);
+    pointer-events: none;
+  }
+
+  .page-hero-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .page-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+    margin-bottom: 16px;
+  }
+
+  .page-title {
+    font-family: var(--font-head);
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .page-meta {
+    font-size: 14px;
+    color: var(--c-muted);
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 70px 40px 100px;
+  }
+
+  /* Table of contents */
+  .toc {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 56px;
+  }
+
+  .toc-title {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    margin-bottom: 16px;
+  }
+
+  .toc ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    counter-reset: toc;
+  }
+
+  .toc ol li {
+    counter-increment: toc;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .toc ol li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--c-accent);
+    flex-shrink: 0;
+  }
+
+  .toc ol li a {
+    color: var(--c-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .toc ol li a:hover { color: var(--c-text); }
+
+  /* Sections */
+  .policy-section {
+    margin-bottom: 56px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--c-border);
+  }
+  .policy-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .section-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-family: var(--font-head);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+    color: var(--c-text);
+  }
+
+  p {
+    font-size: 15px;
+    color: rgba(232,237,245,0.8);
+    line-height: 1.8;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  ul, ol {
+    margin: 16px 0 16px 0;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  ul li, ol li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: rgba(232,237,245,0.8);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  ul li::before {
+    content: '→';
+    color: var(--c-accent);
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  ol { counter-reset: ol-counter; }
+  ol li { counter-increment: ol-counter; }
+  ol li::before {
+    content: counter(ol-counter) '.';
+    color: var(--c-accent);
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+    min-width: 20px;
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--c-text);
+  }
+
+  a {
+    color: var(--c-accent);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  a:hover { opacity: 0.75; }
+
+  /* Highlight box */
+  .highlight-box {
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-left: 3px solid var(--c-accent);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+
+  .highlight-box p {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(232,237,245,0.75);
+  }
+
+  /* Processor table */
+  .processor-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+
+  .processor-table th {
+    background: var(--c-surface);
+    color: var(--c-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .processor-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--c-border);
+    color: rgba(232,237,245,0.75);
+    font-weight: 300;
+    vertical-align: top;
+  }
+
+  .processor-table tr:last-child td { border-bottom: none; }
+  .processor-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* Contact card */
+  .contact-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .contact-card p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--c-border);
+    padding: 32px 40px;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  footer a { color: rgba(255,255,255,0.4); }
+  footer a:hover { color: var(--c-text); }
+
+  @media (max-width: 700px) {
+    nav { padding: 0 20px; }
+    .page-hero { padding: 120px 20px 48px; }
+    .content { padding: 48px 20px 80px; }
+    .toc { padding: 20px; }
+    .contact-card { padding: 20px; }
+    .processor-table { font-size: 13px; }
+    .processor-table th, .processor-table td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="8" fill="url(#pp-logo-bg)"/>
+      <path d="M20 8C13.373 8 8 13.373 8 20C8 26.627 13.373 32 20 32" stroke="#00D4FF" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M20 8C26.627 8 32 13.373 32 20C32 26.627 26.627 32 20 32" stroke="url(#pp-logo-grad)" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="20" cy="20" r="4" fill="#00D4FF"/>
+      <defs>
+        <linearGradient id="pp-logo-bg" x1="0" y1="0" x2="40" y2="40">
+          <stop offset="0%" stop-color="#0C1524"/><stop offset="100%" stop-color="#071120"/>
+        </linearGradient>
+        <linearGradient id="pp-logo-grad" x1="20" y1="8" x2="32" y2="32">
+          <stop offset="0%" stop-color="#0057FF"/><stop offset="100%" stop-color="#00D4FF"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="nav-wordmark">CloudCore <span>Global</span></div>
+  </a>
+  <a href="/" class="nav-back">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 3L5 8l5 5"/></svg>
+    Back to Home
+  </a>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-label">Legal</div>
+    <h1 class="page-title">Privacy Policy</h1>
+    <p class="page-meta">CloudCore Global, LLC &nbsp;·&nbsp; Last updated: May 10, 2025 &nbsp;·&nbsp; Effective: May 10, 2025</p>
+  </div>
+</div>
+
+<!-- ── CONTENT ── -->
+<div class="content">
+
+  <div class="highlight-box">
+    <p><strong>Plain-language summary:</strong> We collect only the information you voluntarily provide through our contact form. We use it solely to respond to your inquiry. We do not sell your data, run advertising, or use tracking cookies. You can request deletion of your data at any time by emailing <a href="mailto:privacy@ccglobal.ai">privacy@ccglobal.ai</a>.</p>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#who-we-are">Who We Are</a></li>
+      <li><a href="#data-we-collect">Information We Collect</a></li>
+      <li><a href="#how-we-use">How We Use Your Information</a></li>
+      <li><a href="#legal-basis">Legal Basis for Processing (GDPR)</a></li>
+      <li><a href="#data-processors">Third-Party Data Processors</a></li>
+      <li><a href="#analytics">Analytics & Cookies</a></li>
+      <li><a href="#data-retention">Data Retention</a></li>
+      <li><a href="#your-rights">Your Rights</a></li>
+      <li><a href="#ccpa">California Privacy Rights (CCPA)</a></li>
+      <li><a href="#children">Children's Privacy</a></li>
+      <li><a href="#changes">Changes to This Policy</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. WHO WE ARE -->
+  <div class="policy-section" id="who-we-are">
+    <div class="section-num">01</div>
+    <h2>Who We Are</h2>
+    <p>CloudCore Global ("we," "us," or "our") is a digital transformation and managed cloud services company operating at <a href="https://ccglobal.ai">ccglobal.ai</a>. We provide enterprise cloud strategy, migration, managed services, and related professional services to businesses worldwide.</p>
+    <p>For the purposes of applicable data protection law, CloudCore Global is the <strong>data controller</strong> responsible for your personal information collected through this website.</p>
+    <p>You can reach us at: <a href="mailto:privacy@ccglobal.ai">privacy@ccglobal.ai</a></p>
+  </div>
+
+  <!-- 2. DATA WE COLLECT -->
+  <div class="policy-section" id="data-we-collect">
+    <div class="section-num">02</div>
+    <h2>Information We Collect</h2>
+    <p>We collect information only when you voluntarily submit our contact form. We do not use tracking pixels, advertising cookies, or any passive data collection beyond basic infrastructure-level analytics described in Section 6.</p>
+
+    <p><strong>Contact form fields we collect:</strong></p>
+    <ul>
+      <li><strong>First and last name</strong> — to address you personally in our response</li>
+      <li><strong>Work email address</strong> — to reply to your inquiry</li>
+      <li><strong>Phone number</strong> — to follow up by phone if you prefer</li>
+      <li><strong>Company name and job title</strong> — to understand the context of your inquiry</li>
+      <li><strong>Company size and timeline</strong> — to route your inquiry to the right specialist</li>
+      <li><strong>Service interest and budget range</strong> — to provide relevant information</li>
+      <li><strong>Message content</strong> — the details of your inquiry or challenge</li>
+    </ul>
+
+    <p>We do not collect payment information, government IDs, social security numbers, or any sensitive personal data through this website.</p>
+  </div>
+
+  <!-- 3. HOW WE USE -->
+  <div class="policy-section" id="how-we-use">
+    <div class="section-num">03</div>
+    <h2>How We Use Your Information</h2>
+    <p>We use the information you provide exclusively for the following purposes:</p>
+    <ul>
+      <li>Responding to your inquiry and scheduling discovery consultations</li>
+      <li>Routing your request to the appropriate CloudCore Global specialist</li>
+      <li>Sending you relevant information about services you have expressed interest in</li>
+      <li>Maintaining a record of our communications for business continuity</li>
+      <li>Complying with our legal obligations</li>
+    </ul>
+    <p>We do <strong>not</strong> use your information for advertising targeting, profiling, automated decision-making, or sale to third parties. We do not add you to marketing lists without your explicit consent.</p>
+  </div>
+
+  <!-- 4. LEGAL BASIS -->
+  <div class="policy-section" id="legal-basis">
+    <div class="section-num">04</div>
+    <h2>Legal Basis for Processing (GDPR)</h2>
+    <p>If you are located in the European Economic Area (EEA), United Kingdom, or Switzerland, we process your personal data under the following legal bases:</p>
+    <ul>
+      <li><strong>Consent (Art. 6(1)(a) GDPR)</strong> — You explicitly checked the consent box on our contact form before submission</li>
+      <li><strong>Legitimate interests (Art. 6(1)(f) GDPR)</strong> — Responding to business inquiries is a legitimate interest that does not override your rights</li>
+      <li><strong>Contract (Art. 6(1)(b) GDPR)</strong> — If we enter into a services agreement, processing is necessary to perform that contract</li>
+    </ul>
+    <p>You may withdraw your consent at any time by contacting <a href="mailto:privacy@ccglobal.ai">privacy@ccglobal.ai</a>. Withdrawal does not affect the lawfulness of processing before withdrawal.</p>
+  </div>
+
+  <!-- 5. DATA PROCESSORS -->
+  <div class="policy-section" id="data-processors">
+    <div class="section-num">05</div>
+    <h2>Third-Party Data Processors</h2>
+    <p>We use the following trusted third-party services to operate this website. Each processor is bound by appropriate data processing agreements and applicable law.</p>
+
+    <table class="processor-table">
+      <thead>
+        <tr>
+          <th>Processor</th>
+          <th>Purpose</th>
+          <th>Data Processed</th>
+          <th>Privacy Policy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Formspree</strong></td>
+          <td>Contact form submission processing and email delivery</td>
+          <td>All contact form fields</td>
+          <td><a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener">formspree.io/legal/privacy-policy</a></td>
+        </tr>
+        <tr>
+          <td><strong>Cloudflare</strong></td>
+          <td>Website hosting, CDN, DDoS protection, and privacy-friendly web analytics</td>
+          <td>IP addresses (anonymized), page views, performance metrics</td>
+          <td><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">cloudflare.com/privacypolicy</a></td>
+        </tr>
+        <tr>
+          <td><strong>Google Fonts</strong></td>
+          <td>Web font delivery</td>
+          <td>IP address (standard CDN request log)</td>
+          <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>We do not sell, rent, lease, or share your personal information with any other third parties except as required by law or with your explicit consent.</p>
+  </div>
+
+  <!-- 6. ANALYTICS -->
+  <div class="policy-section" id="analytics">
+    <div class="section-num">06</div>
+    <h2>Analytics &amp; Cookies</h2>
+    <p>This website uses <strong>Cloudflare Web Analytics</strong>, a privacy-first analytics solution. Cloudflare Web Analytics does not use cookies, does not fingerprint individual users, and does not collect personally identifiable information. It measures aggregate page views, visit counts, and Core Web Vitals performance metrics.</p>
+
+    <div class="highlight-box">
+      <p>We do <strong>not</strong> use Google Analytics, Facebook Pixel, advertising cookies, or any third-party tracking technologies that profile individual users or serve targeted advertising.</p>
+    </div>
+
+    <p>Because we use no tracking cookies, we are not required to display a cookie consent banner for analytics purposes. The only cookies that may be set are essential security cookies placed by Cloudflare's infrastructure (e.g., bot protection). These are strictly necessary and cannot be disabled without breaking site functionality.</p>
+  </div>
+
+  <!-- 7. DATA RETENTION -->
+  <div class="policy-section" id="data-retention">
+    <div class="section-num">07</div>
+    <h2>Data Retention</h2>
+    <p>We retain contact form submissions for <strong>24 months</strong> from the date of receipt, or for the duration of any active business relationship, whichever is longer. After this period, data is permanently deleted from our systems and from Formspree.</p>
+    <p>You may request earlier deletion at any time — see Section 8 for your rights.</p>
+    <p>Cloudflare analytics data is aggregated and anonymized and is not subject to individual deletion requests.</p>
+  </div>
+
+  <!-- 8. YOUR RIGHTS -->
+  <div class="policy-section" id="your-rights">
+    <div class="section-num">08</div>
+    <h2>Your Rights</h2>
+    <p>Depending on your location, you have the following rights regarding your personal data:</p>
+    <ul>
+      <li><strong>Right of access</strong> — Request a copy of the personal data we hold about you</li>
+      <li><strong>Right to rectification</strong> — Request correction of inaccurate or incomplete data</li>
+      <li><strong>Right to erasure</strong> — Request deletion of your personal data ("right to be forgotten")</li>
+      <li><strong>Right to restrict processing</strong> — Request that we limit how we use your data</li>
+      <li><strong>Right to data portability</strong> — Request your data in a structured, machine-readable format</li>
+      <li><strong>Right to object</strong> — Object to processing based on legitimate interests</li>
+      <li><strong>Right to withdraw consent</strong> — Withdraw consent at any time without affecting prior processing</li>
+    </ul>
+    <p>To exercise any of these rights, email us at <a href="mailto:privacy@ccglobal.ai">privacy@ccglobal.ai</a> with your request. We will respond within <strong>30 days</strong>. We may ask you to verify your identity before fulfilling the request.</p>
+    <p>If you are in the EEA, you also have the right to lodge a complaint with your local data protection authority.</p>
+  </div>
+
+  <!-- 9. CCPA -->
+  <div class="policy-section" id="ccpa">
+    <div class="section-num">09</div>
+    <h2>California Privacy Rights (CCPA / CPRA)</h2>
+    <p>If you are a California resident, you have the following rights under the California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA):</p>
+    <ul>
+      <li><strong>Right to know</strong> — What personal information we collect, use, disclose, and sell</li>
+      <li><strong>Right to delete</strong> — Request deletion of your personal information</li>
+      <li><strong>Right to opt-out of sale</strong> — We do not sell personal information. No opt-out is required.</li>
+      <li><strong>Right to non-discrimination</strong> — We will not discriminate against you for exercising your privacy rights</li>
+      <li><strong>Right to correct</strong> — Request correction of inaccurate personal information</li>
+      <li><strong>Right to limit use of sensitive personal information</strong> — We do not collect sensitive personal information as defined by CPRA</li>
+    </ul>
+    <p>To submit a California privacy rights request, email <a href="mailto:privacy@ccglobal.ai">privacy@ccglobal.ai</a> with the subject line "California Privacy Request." We will respond within 45 days.</p>
+  </div>
+
+  <!-- 10. CHILDREN -->
+  <div class="policy-section" id="children">
+    <div class="section-num">10</div>
+    <h2>Children's Privacy</h2>
+    <p>This website is intended for business professionals and is not directed at individuals under the age of 16. We do not knowingly collect personal information from children under 16. If you believe a child has submitted information through our website, please contact us at <a href="mailto:privacy@ccglobal.ai">privacy@ccglobal.ai</a> and we will promptly delete it.</p>
+  </div>
+
+  <!-- 11. CHANGES -->
+  <div class="policy-section" id="changes">
+    <div class="section-num">11</div>
+    <h2>Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, legal requirements, or other factors. When we make material changes, we will update the "Last updated" date at the top of this page.</p>
+    <p>We encourage you to review this policy periodically. Your continued use of our website after any changes constitutes your acceptance of the updated policy.</p>
+  </div>
+
+  <!-- 12. CONTACT -->
+  <div class="policy-section" id="contact">
+    <div class="section-num">12</div>
+    <h2>Contact Us</h2>
+    <p>For any privacy-related questions, requests, or concerns, please contact us using the information below. We are committed to resolving any concerns promptly and transparently.</p>
+
+    <div class="contact-card">
+      <p><strong>CloudCore Global</strong></p>
+      <p>Privacy Inquiries: <a href="mailto:privacy@ccglobal.ai">privacy@ccglobal.ai</a></p>
+      <p>General Contact: <a href="mailto:hello@ccglobal.ai">hello@ccglobal.ai</a></p>
+      <p>Website: <a href="https://ccglobal.ai">ccglobal.ai</a></p>
+      <p style="margin-top:8px; font-size:13px; color:var(--c-muted);">We aim to respond to all privacy requests within 5 business days and to fulfill them within 30 days.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© 2025 CloudCore Global. All rights reserved. &nbsp;·&nbsp; <a href="/">Home</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="mailto:privacy@ccglobal.ai">privacy@ccglobal.ai</a></p>
+</footer>
+
+</body>
+</html>
