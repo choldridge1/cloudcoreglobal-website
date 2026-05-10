@@ -1796,33 +1796,75 @@
   document.querySelectorAll('.metrics').forEach(el => metricObserver.observe(el));
 
   // ── FORM SUBMIT ──
-  function submitForm() {
-    const fname = document.getElementById('fname').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const service = document.getElementById('service').value;
-    const consent = document.getElementById('consent').checked;
+  async function submitForm() {
+    const fname    = document.getElementById('fname').value.trim();
+    const lname    = document.getElementById('lname').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const company  = document.getElementById('company').value.trim();
+    const title    = document.getElementById('title').value.trim();
+    const size     = document.getElementById('size').value;
+    const timeline = document.getElementById('timeline').value;
+    const service  = document.getElementById('service').value;
+    const budget   = document.getElementById('budget').value;
+    const message  = document.getElementById('message').value.trim();
+    const consent  = document.getElementById('consent').checked;
 
-    if (!fname || !email || !service || !consent) {
-      // Highlight empty required fields
-      ['fname','email','service'].forEach(id => {
-        const el = document.getElementById(id);
-        if (!el.value.trim()) {
-          el.style.borderColor = '#FF5A5A';
-          el.addEventListener('input', () => el.style.borderColor = '', { once: true });
-        }
-      });
-      if (!consent) {
-        document.getElementById('consent').style.outline = '2px solid #FF5A5A';
+    // Validate required fields
+    let valid = true;
+    ['fname','email','company','service'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        el.style.borderColor = '#FF5A5A';
+        el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+        valid = false;
       }
-      return;
+    });
+    if (!consent) {
+      document.getElementById('consent').style.outline = '2px solid #FF5A5A';
+      valid = false;
     }
+    if (!valid) return;
 
-    // Show success
-    document.getElementById('form-wrapper').style.display = 'none';
-    document.getElementById('form-success').classList.add('show');
+    // Disable button & show loading state
+    const btn = document.querySelector('.form-submit');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
 
-    // Scroll into view
-    document.getElementById('form-success').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // POST to Formspree
+    try {
+      const res = await fetch('https://formspree.io/f/maqvlazo', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          'First Name':       fname,
+          'Last Name':        lname,
+          'email':            email,
+          'Company':          company,
+          'Job Title':        title,
+          'Company Size':     size,
+          'Timeline':         timeline,
+          'Service Interest': service,
+          'Budget Range':     budget,
+          'Message':          message,
+          '_subject':         'New Inquiry from ' + fname + ' ' + lname + ' — ' + company
+        })
+      });
+
+      if (res.ok) {
+        document.getElementById('form-wrapper').style.display = 'none';
+        document.getElementById('form-success').classList.add('show');
+        document.getElementById('form-success').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        const data = await res.json();
+        btn.disabled = false;
+        btn.textContent = 'Request Free Discovery Workshop →';
+        alert(data.errors ? data.errors.map(e => e.message).join(', ') : 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Request Free Discovery Workshop →';
+      alert('Network error — please check your connection and try again.');
+    }
   }
 </script>
 </body>
