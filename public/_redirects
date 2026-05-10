@@ -1,0 +1,6 @@
+# Redirect www to apex
+https://www.ccglobal.ai/* https://ccglobal.ai/:splat 301!
+
+# Redirect HTTP to HTTPS (Cloudflare handles this, but belt-and-suspenders)
+http://ccglobal.ai/* https://ccglobal.ai/:splat 301!
+http://www.ccglobal.ai/* https://ccglobal.ai/:splat 301!
