@@ -1568,9 +1568,15 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="email">Work Email *</label>
-              <input type="email" id="email" placeholder="jane.smith@company.com" required>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Work Email *</label>
+                <input type="email" id="email" placeholder="jane.smith@company.com" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" placeholder="+1 (555) 000-0000" required>
+              </div>
             </div>
 
             <div class="form-row">
@@ -1807,11 +1813,12 @@
     const service  = document.getElementById('service').value;
     const budget   = document.getElementById('budget').value;
     const message  = document.getElementById('message').value.trim();
+    const phone    = document.getElementById('phone').value.trim();
     const consent  = document.getElementById('consent').checked;
 
     // Validate required fields
     let valid = true;
-    ['fname','email','company','service'].forEach(id => {
+    ['fname','email','phone','company','service'].forEach(id => {
       const el = document.getElementById(id);
       if (!el.value.trim()) {
         el.style.borderColor = '#FF5A5A';
@@ -1843,6 +1850,7 @@
           'Job Title':        title,
           'Company Size':     size,
           'Timeline':         timeline,
+          'Phone Number':     phone,
           'Service Interest': service,
           'Budget Range':     budget,
           'Message':          message,
