@@ -1777,13 +1777,21 @@
 
     <!-- Featured Video -->
     <div class="yt-featured fade-up">
-      <div class="yt-embed-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/U7KVyk9b0k4?rel=0&modestbranding=1"
-          title="CloudCore — Latest Video"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
+      <div class="yt-embed-wrap" id="featured-player" onclick="loadFeatured()" style="cursor:pointer;">
+        <img
+          src="https://i.ytimg.com/vi/U7KVyk9b0k4/maxresdefault.jpg"
+          alt="CloudCore — Latest Video"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;"
+          onerror="this.src='https://i.ytimg.com/vi/U7KVyk9b0k4/hqdefault.jpg'"
+        >
+        <!-- Play button overlay -->
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.25);transition:background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.1)'" onmouseout="this.style.background='rgba(0,0,0,0.25)'">
+          <div style="width:72px;height:72px;background:#FF0000;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(255,0,0,0.5);">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="white"><path d="M6 4l18 10L6 24V4z"/></svg>
+          </div>
+        </div>
+        <!-- Duration badge -->
+        <div style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;font-weight:600;padding:3px 8px;border-radius:4px;font-family:var(--font-body);">Click to play</div>
       </div>
 
       <div class="yt-featured-info">
@@ -1818,7 +1826,7 @@
 
       <a href="https://www.youtube.com/watch?v=FXV1w53DgF8" target="_blank" rel="noopener" class="yt-card fade-up">
         <div class="yt-thumb">
-          <iframe src="https://www.youtube.com/embed/FXV1w53DgF8?rel=0&modestbranding=1&controls=0" title="Infrastructure as Code" tabindex="-1" allowfullscreen></iframe>
+          <img src="https://i.ytimg.com/vi/FXV1w53DgF8/mqdefault.jpg" alt="Infrastructure as Code" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.ytimg.com/vi/FXV1w53DgF8/hqdefault.jpg'">
           <div class="yt-thumb-overlay">
             <div class="yt-play-btn">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
@@ -1834,7 +1842,7 @@
 
       <a href="https://www.youtube.com/watch?v=GVo2-d3G2aw" target="_blank" rel="noopener" class="yt-card fade-up" style="transition-delay:0.1s">
         <div class="yt-thumb">
-          <iframe src="https://www.youtube.com/embed/GVo2-d3G2aw?rel=0&modestbranding=1&controls=0" title="DevOps & CI/CD" tabindex="-1" allowfullscreen></iframe>
+          <img src="https://i.ytimg.com/vi/GVo2-d3G2aw/mqdefault.jpg" alt="DevOps & CI/CD" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.ytimg.com/vi/GVo2-d3G2aw/hqdefault.jpg'">
           <div class="yt-thumb-overlay">
             <div class="yt-play-btn">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
@@ -1850,7 +1858,7 @@
 
       <a href="https://www.youtube.com/watch?v=50eEZIMSD8U" target="_blank" rel="noopener" class="yt-card fade-up" style="transition-delay:0.2s">
         <div class="yt-thumb">
-          <iframe src="https://www.youtube.com/embed/50eEZIMSD8U?rel=0&modestbranding=1&controls=0" title="Cloud Security" tabindex="-1" allowfullscreen></iframe>
+          <img src="https://i.ytimg.com/vi/50eEZIMSD8U/mqdefault.jpg" alt="Cloud Security" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.ytimg.com/vi/50eEZIMSD8U/hqdefault.jpg'">
           <div class="yt-thumb-overlay">
             <div class="yt-play-btn">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
@@ -1866,7 +1874,7 @@
 
       <a href="https://www.youtube.com/watch?v=Ghn04pMLSDc" target="_blank" rel="noopener" class="yt-card fade-up" style="transition-delay:0.3s">
         <div class="yt-thumb">
-          <iframe src="https://www.youtube.com/embed/Ghn04pMLSDc?rel=0&modestbranding=1&controls=0" title="Cloud Operations" tabindex="-1" allowfullscreen></iframe>
+          <img src="https://i.ytimg.com/vi/Ghn04pMLSDc/mqdefault.jpg" alt="Cloud Operations" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.ytimg.com/vi/Ghn04pMLSDc/hqdefault.jpg'">
           <div class="yt-thumb-overlay">
             <div class="yt-play-btn">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
@@ -2273,6 +2281,14 @@
       btn.textContent = 'Request Free Discovery Workshop →';
       alert('Network error — please check your connection and try again.');
     }
+  }
+
+  // ── YOUTUBE FEATURED PLAYER ──
+  function loadFeatured() {
+    const wrap = document.getElementById('featured-player');
+    wrap.style.cursor = 'default';
+    wrap.onclick = null;
+    wrap.innerHTML = '<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" src="https://www.youtube.com/embed/U7KVyk9b0k4?autoplay=1&rel=0&modestbranding=1" title="CloudCore — Latest Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
   }
 </script>
 </body>
