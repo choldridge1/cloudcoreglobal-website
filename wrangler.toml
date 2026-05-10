@@ -1,2 +1,6 @@
-# wrangler.toml
-name = 'dry-boat-90a7'
+name = "cloudcoreglobal-website"
+compatibility_date = "2026-05-10"
+
+[assets]
+directory = "./public"
+not_found_handling = "404-page"
