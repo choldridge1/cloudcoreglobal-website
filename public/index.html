@@ -2180,3 +2180,2307 @@
   } else {
     revealAll();
   }
+
+  // ── NAV SCROLL EFFECT ──
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.background = window.scrollY > 60
+      ? 'rgba(5,10,20,0.97)'
+      : 'rgba(5,10,20,0.85)';
+  });
+
+  // ── SMOOTH NAV LINKS ──
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ── COUNTER ANIMATION ──
+  function animateCounter(el, target, suffix, decimals) {
+    let start = 0;
+    const duration = 2000;
+    const step = timestamp => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = eased * target;
+      el.textContent = (decimals ? val.toFixed(2) : Math.floor(val)) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const metricObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !e.target.dataset.animated) {
+        e.target.dataset.animated = '1';
+        const nums = e.target.querySelectorAll('.metric-number');
+        nums.forEach(n => {
+          const text = n.textContent;
+          if (text.includes('340')) animateCounter(n, 340, '+', false);
+          else if (text.includes('62')) animateCounter(n, 62, '%', false);
+          else if (text.includes('99.97')) animateCounter(n, 99.97, '%', true);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.metrics').forEach(el => metricObserver.observe(el));
+
+  // ── FORM SUBMIT ──
+  async function submitForm() {
+    const fname    = document.getElementById('fname').value.trim();
+    const lname    = document.getElementById('lname').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const company  = document.getElementById('company').value.trim();
+    const title    = document.getElementById('title').value.trim();
+    const size     = document.getElementById('size').value;
+    const timeline = document.getElementById('timeline').value;
+    const service  = document.getElementById('service').value;
+    const budget   = document.getElementById('budget').value;
+    const message  = document.getElementById('message').value.trim();
+    const phone    = document.getElementById('phone').value.trim();
+    const consent  = document.getElementById('consent').checked;
+
+    // Validate required fields
+    let valid = true;
+    ['fname','email','phone','company','service'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        el.style.borderColor = '#FF5A5A';
+        el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+        valid = false;
+      }
+    });
+    if (!consent) {
+      document.getElementById('consent').style.outline = '2px solid #FF5A5A';
+      valid = false;
+    }
+    if (!valid) return;
+
+    // Disable button & show loading state
+    const btn = document.querySelector('.form-submit');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    // POST to Formspree
+    try {
+      const res = await fetch('https://formspree.io/f/maqvlazo', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          'First Name':       fname,
+          'Last Name':        lname,
+          'email':            email,
+          'Company':          company,
+          'Job Title':        title,
+          'Company Size':     size,
+          'Timeline':         timeline,
+          'Phone Number':     phone,
+          'Service Interest': service,
+          'Budget Range':     budget,
+          'Message':          message,
+          '_subject':         'New Inquiry from ' + fname + ' ' + lname + ' — ' + company
+        })
+      });
+
+      if (res.ok) {
+        document.getElementById('form-wrapper').style.display = 'none';
+        document.getElementById('form-success').classList.add('show');
+        document.getElementById('form-success').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        const data = await res.json();
+        btn.disabled = false;
+        btn.textContent = 'Request Free Discovery Workshop →';
+        alert(data.errors ? data.errors.map(e => e.message).join(', ') : 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Request Free Discovery Workshop →';
+      alert('Network error — please check your connection and try again.');
+    }
+  }
+
+  // ── YOUTUBE FEATURED PLAYER ──
+  function loadFeatured() {
+    const wrap = document.getElementById('featured-player');
+    wrap.style.cursor = 'default';
+    wrap.onclick = null;
+    wrap.innerHTML = '<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" src="https://www.youtube.com/embed/U7KVyk9b0k4?autoplay=1&rel=0&modestbranding=1" title="CloudCore — Latest Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+  }
+</script>
+</body>
+</html>
+
+<style>
+  :root {
+    --c-bg: #050A14;
+    --c-surface: #0C1524;
+    --c-surface2: #111D30;
+    --c-border: rgba(255,255,255,0.08);
+    --c-text: #E8EDF5;
+    --c-muted: #7A8DA8;
+    --c-accent: #00D4FF;
+    --c-accent2: #0057FF;
+    --c-gold: #F5C842;
+    --c-green: #00E5A0;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius: 12px;
+    --max: 1200px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 72px;
+    background: rgba(5,10,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--c-border);
+    transition: background 0.3s;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  .nav-wordmark {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--c-text);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .nav-wordmark span { color: var(--c-accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--c-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--c-text); }
+
+  .nav-cta {
+    background: var(--c-accent);
+    color: var(--c-bg) !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 600 !important;
+    color: #000 !important;
+    transition: opacity 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 40px 80px;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 700px;
+    background: radial-gradient(ellipse, rgba(0,87,255,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    bottom: -100px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(0,212,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    max-width: var(--max);
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--c-accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--c-accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  .hero-title {
+    font-family: var(--font-head);
+    font-size: clamp(42px, 5vw, 68px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--c-accent), var(--c-accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--c-muted);
+    line-height: 1.7;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--c-accent2), var(--c-accent));
+    color: #fff;
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 30px rgba(0,87,255,0.35);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(0,87,255,0.5);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--c-text);
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    border: 1px solid var(--c-border);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* Hero visual - animated cloud architecture */
+  .hero-visual {
+    position: relative;
+    height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .arch-diagram {
+    width: 100%;
+    max-width: 500px;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-16px); }
+  }
+
+  /* ── TICKER STRIP ── */
+  .ticker {
+    background: var(--c-surface);
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+    padding: 18px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .ticker-inner {
+    display: inline-flex;
+    gap: 0;
+    animation: ticker 30s linear infinite;
+  }
+
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 40px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--c-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .ticker-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--c-accent);
+    border-radius: 50%;
+  }
+
+  /* ── METRICS ── */
+  .metrics {
+    padding: 80px 40px;
+    max-width: var(--max);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .metric-card {
+    background: var(--c-surface);
+    padding: 40px 32px;
+    border: 1px solid var(--c-border);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .metric-card:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+  .metric-card:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--c-accent2), var(--c-accent));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .metric-card:hover { border-color: rgba(0,212,255,0.3); }
+  .metric-card:hover::before { opacity: 1; }
+
+  .metric-number {
+    font-family: var(--font-head);
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff, var(--c-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .metric-label {
+    font-size: 14px;
+    color: var(--c-muted);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    padding: 100px 40px;
+  }
+
+  .section-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    font-size: 17px;
+    color: var(--c-muted);
+    line-height: 1.75;
+    max-width: 580px;
+    font-weight: 300;
+  }
+
+  /* ── SERVICES ── */
+  .services-bg {
+    background: var(--c-surface);
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    margin-top: 60px;
+    background: var(--c-border);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .service-card {
+    background: var(--c-surface2);
+    padding: 44px 36px;
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .service-card:hover {
+    background: #152035;
+  }
+
+  .service-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .service-title {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+
+  .service-desc {
+    font-size: 14px;
+    color: var(--c-muted);
+    line-height: 1.7;
+  }
+
+  .service-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--c-accent);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: gap 0.2s;
+  }
+
+  .service-link:hover { gap: 10px; }
+
+  /* ── TRANSFORMATION APPROACH ── */
+  .approach-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+
+  .steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--c-border);
+    position: relative;
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--c-accent);
+    letter-spacing: 0.05em;
+    min-width: 36px;
+    padding-top: 3px;
+  }
+
+  .step-content h4 {
+    font-family: var(--font-head);
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .step-content p {
+    font-size: 14px;
+    color: var(--c-muted);
+    line-height: 1.65;
+  }
+
+  /* Approach visual */
+  .approach-visual {
+    position: relative;
+  }
+
+  .approach-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 16px;
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .approach-card::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(0,87,255,0.15), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .result-items {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .result-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid var(--c-border);
+  }
+
+  .result-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  .result-icon.green { background: rgba(0,229,160,0.1); }
+  .result-icon.blue { background: rgba(0,212,255,0.1); }
+  .result-icon.gold { background: rgba(245,200,66,0.1); }
+
+  .result-text strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .result-text span {
+    font-size: 12px;
+    color: var(--c-muted);
+  }
+
+  /* ── INDUSTRIES ── */
+  .industries-bg {
+    background: var(--c-surface);
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .industries-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 60px;
+  }
+
+  .industry-card {
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: 10px;
+    padding: 28px 24px;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+
+  .industry-card:hover {
+    border-color: rgba(0,212,255,0.3);
+    transform: translateY(-3px);
+  }
+
+  .industry-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+  }
+
+  .industry-name {
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .industry-desc {
+    font-size: 12px;
+    color: var(--c-muted);
+    line-height: 1.6;
+  }
+
+  /* ── CASE STUDIES / RESULTS ── */
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+  }
+
+  .result-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 14px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .result-card:hover {
+    border-color: rgba(0,212,255,0.25);
+    transform: translateY(-4px);
+  }
+
+  .result-card-accent {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle at bottom right, rgba(0,87,255,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .result-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .result-stat {
+    font-family: var(--font-head);
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff 40%, var(--c-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .result-desc {
+    font-size: 15px;
+    color: var(--c-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .result-client {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ── CONTACT SECTION ── */
+  .contact-bg {
+    background: var(--c-surface);
+    border-top: 1px solid var(--c-border);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: start;
+    margin-top: 60px;
+  }
+
+  .contact-info h3 {
+    font-family: var(--font-head);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.015em;
+  }
+
+  .contact-info p {
+    font-size: 15px;
+    color: var(--c-muted);
+    line-height: 1.75;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contact-detail {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--c-muted);
+  }
+
+  .contact-detail-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Form */
+  .contact-form {
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: 16px;
+    padding: 44px;
+  }
+
+  .contact-form h3 {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.015em;
+  }
+
+  .contact-form p {
+    font-size: 14px;
+    color: var(--c-muted);
+    margin-bottom: 32px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--c-text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: rgba(0,212,255,0.5);
+    box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
+  }
+
+  .form-group select option { background: var(--c-surface); }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 110px;
+  }
+
+  .form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--c-muted);
+    line-height: 1.5;
+  }
+
+  .form-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    flex-shrink: 0;
+    accent-color: var(--c-accent);
+    cursor: pointer;
+  }
+
+  .form-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--c-accent2), var(--c-accent));
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 15px 28px;
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    letter-spacing: 0.01em;
+    box-shadow: 0 4px 24px rgba(0,87,255,0.3);
+  }
+
+  .form-submit:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .form-note {
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--c-muted);
+    text-align: center;
+  }
+
+  /* ── SUCCESS MSG ── */
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 40px;
+  }
+
+  .form-success.show { display: block; }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(0,229,160,0.1);
+    border: 2px solid var(--c-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 28px;
+  }
+
+  .form-success h4 {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .form-success p {
+    color: var(--c-muted);
+    font-size: 15px;
+    margin-bottom: 0 !important;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 60px 40px 40px;
+    border-top: 1px solid var(--c-border);
+  }
+
+  .footer-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+
+  .footer-brand p {
+    font-size: 14px;
+    color: var(--c-muted);
+    line-height: 1.75;
+    margin-top: 16px;
+    max-width: 280px;
+    font-weight: 300;
+  }
+
+  .footer-col h5 {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    margin-bottom: 18px;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-col ul a {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-col ul a:hover { color: var(--c-text); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid var(--c-border);
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+  }
+
+
+  /* ── YOUTUBE SECTION ── */
+  .youtube-bg {
+    background: var(--c-surface);
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .yt-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .yt-subscribe {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #FF0000;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .yt-subscribe:hover { opacity: 0.88; transform: translateY(-2px); }
+
+  /* Featured video */
+  .yt-featured {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 32px;
+    margin-bottom: 32px;
+    align-items: start;
+  }
+
+  .yt-embed-wrap {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--c-border);
+  }
+
+  .yt-embed-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+  }
+
+  .yt-featured-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .yt-featured-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #FF0000;
+  }
+
+  .yt-featured-title {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+  }
+
+  .yt-featured-desc {
+    font-size: 14px;
+    color: var(--c-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .yt-channel-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .yt-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .yt-stat-num {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--c-text);
+  }
+
+  .yt-stat-label {
+    font-size: 11px;
+    color: var(--c-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+
+  .yt-watch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid var(--c-border);
+    color: var(--c-text);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    align-self: flex-start;
+  }
+  .yt-watch-btn:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.05); }
+
+  /* Video grid */
+  .yt-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .yt-card {
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    text-decoration: none;
+    display: block;
+  }
+
+  .yt-card:hover {
+    border-color: rgba(255,0,0,0.3);
+    transform: translateY(-3px);
+  }
+
+  .yt-thumb {
+    position: relative;
+    padding-bottom: 56.25%;
+    background: #0a0a0a;
+    overflow: hidden;
+  }
+
+  .yt-thumb iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+    pointer-events: none;
+  }
+
+  .yt-thumb-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.2);
+    transition: background 0.2s;
+  }
+
+  .yt-card:hover .yt-thumb-overlay { background: rgba(0,0,0,0.05); }
+
+  .yt-play-btn {
+    width: 48px;
+    height: 48px;
+    background: rgba(255,0,0,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+
+  .yt-card:hover .yt-play-btn { transform: scale(1.1); }
+
+  .yt-card-body {
+    padding: 16px 18px 18px;
+  }
+
+  .yt-card-topic {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #FF0000;
+    margin-bottom: 6px;
+  }
+
+  .yt-card-title {
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--c-text);
+    margin-bottom: 6px;
+  }
+
+  .yt-card-desc {
+    font-size: 12px;
+    color: var(--c-muted);
+    line-height: 1.6;
+  }
+
+  /* Topics strip */
+  .yt-topics {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 36px;
+    padding-top: 32px;
+    border-top: 1px solid var(--c-border);
+  }
+
+  .yt-topic-pill {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--c-border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--c-muted);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .yt-topic-pill:hover { border-color: rgba(255,0,0,0.4); color: var(--c-text); }
+
+  @media (max-width: 900px) {
+    .yt-featured { grid-template-columns: 1fr; }
+    .yt-grid { grid-template-columns: 1fr; }
+    .yt-header { flex-direction: column; align-items: flex-start; }
+  }
+  /* ── UTILS ── */
+  .text-accent { color: var(--c-accent); }
+  .text-green { color: var(--c-green); }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Failsafe: force all fade-up visible if JS observer fails */
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-visual { display: none; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric-card:nth-child(2) { border-radius: 0 var(--radius) 0 0; }
+    .metric-card:nth-child(3) { border-radius: 0 0 0 var(--radius); }
+    .services-grid { grid-template-columns: 1fr; }
+    .approach-grid { grid-template-columns: 1fr; }
+    .industries-grid { grid-template-columns: repeat(2, 1fr); }
+    .results-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .section { padding: 70px 20px; }
+    .hero { padding: 100px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <!-- LOGO MARK SVG -->
+    <svg class="logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" rx="8" fill="url(#logo-bg)"/>
+      <path d="M20 8C13.373 8 8 13.373 8 20C8 26.627 13.373 32 20 32" stroke="#00D4FF" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M20 8C26.627 8 32 13.373 32 20C32 26.627 26.627 32 20 32" stroke="url(#logo-grad)" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="20" cy="20" r="4" fill="#00D4FF"/>
+      <path d="M20 14V20L24 23" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+      <path d="M14 20H26" stroke="#0057FF" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+      <defs>
+        <linearGradient id="logo-bg" x1="0" y1="0" x2="40" y2="40">
+          <stop offset="0%" stop-color="#0C1524"/>
+          <stop offset="100%" stop-color="#071120"/>
+        </linearGradient>
+        <linearGradient id="logo-grad" x1="20" y1="8" x2="32" y2="32">
+          <stop offset="0%" stop-color="#0057FF"/>
+          <stop offset="100%" stop-color="#00D4FF"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="nav-wordmark">CloudCore <span>Global</span></div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#industries">Industries</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#youtube">YouTube</a></li>
+    <li><a href="/blog.html">Blog</a></li>
+    <li><a href="#contact" class="nav-cta">Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">Digital Transformation Partner</div>
+      <h1 class="hero-title">
+        Architect Your<br>
+        <em>Cloud-Native</em><br>
+        Future
+      </h1>
+      <p class="hero-sub">
+        CloudCore Global partners with enterprises to design, migrate, and manage transformative cloud infrastructure — accelerating growth, cutting costs, and building competitive advantage at scale.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">
+          Start Your Transformation
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M9 4l4 4-4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#results" class="btn-secondary">
+          View Case Studies
+        </a>
+      </div>
+    </div>
+
+    <!-- HERO DIAGRAM -->
+    <div class="hero-visual">
+      <svg class="arch-diagram" viewBox="0 0 500 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background card -->
+        <rect x="20" y="20" width="460" height="380" rx="16" fill="#0C1524" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+        <!-- Grid lines -->
+        <line x1="20" y1="80" x2="480" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="20" y1="140" x2="480" y2="140" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="20" y1="200" x2="480" y2="200" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="20" y1="260" x2="480" y2="260" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="20" y1="320" x2="480" y2="320" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+        <!-- Title -->
+        <text x="40" y="56" font-family="Syne, sans-serif" font-size="13" fill="rgba(255,255,255,0.5)" font-weight="600">CLOUDCORE ARCHITECTURE</text>
+        <circle cx="440" cy="50" r="6" fill="#00E5A0">
+          <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="452" y="55" font-family="DM Sans, sans-serif" font-size="11" fill="#00E5A0">LIVE</text>
+
+        <!-- Users layer -->
+        <rect x="40" y="95" width="420" height="50" rx="8" fill="rgba(0,87,255,0.08)" stroke="rgba(0,87,255,0.2)" stroke-width="1"/>
+        <text x="55" y="116" font-family="DM Sans, sans-serif" font-size="11" fill="rgba(255,255,255,0.4)" font-weight="500">USERS &amp; ENDPOINTS</text>
+        <!-- user icons -->
+        <circle cx="180" cy="118" r="8" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.4)" stroke-width="1"/>
+        <text x="177" y="122" font-size="9" fill="#00D4FF">👤</text>
+        <circle cx="210" cy="118" r="8" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.4)" stroke-width="1"/>
+        <text x="207" y="122" font-size="9" fill="#00D4FF">👤</text>
+        <circle cx="240" cy="118" r="8" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.4)" stroke-width="1"/>
+        <text x="237" y="122" font-size="9" fill="#00D4FF">👤</text>
+        <text x="260" y="122" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.3)">+2.4M</text>
+
+        <!-- Connection lines -->
+        <line x1="250" y1="145" x2="250" y2="165" stroke="rgba(0,212,255,0.4)" stroke-width="1.5" stroke-dasharray="4 3">
+          <animate attributeName="stroke-dashoffset" values="0;-14" dur="1.5s" repeatCount="indefinite"/>
+        </line>
+
+        <!-- CDN/Edge layer -->
+        <rect x="40" y="165" width="420" height="50" rx="8" fill="rgba(0,212,255,0.06)" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+        <text x="55" y="186" font-family="DM Sans, sans-serif" font-size="11" fill="rgba(255,255,255,0.4)" font-weight="500">CDN / EDGE NETWORK</text>
+        <rect x="180" y="174" width="60" height="24" rx="4" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+        <text x="193" y="190" font-family="DM Sans, sans-serif" font-size="10" fill="#00D4FF" font-weight="600">Cloudflare</text>
+        <rect x="256" y="174" width="50" height="24" rx="4" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+        <text x="266" y="190" font-family="DM Sans, sans-serif" font-size="10" fill="#00D4FF" font-weight="600">AWS CF</text>
+        <rect x="320" y="174" width="50" height="24" rx="4" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+        <text x="330" y="190" font-family="DM Sans, sans-serif" font-size="10" fill="#00D4FF" font-weight="600">Azure</text>
+
+        <!-- Connection lines -->
+        <line x1="150" y1="215" x2="150" y2="235" stroke="rgba(0,87,255,0.4)" stroke-width="1.5" stroke-dasharray="4 3">
+          <animate attributeName="stroke-dashoffset" values="0;-14" dur="2s" repeatCount="indefinite"/>
+        </line>
+        <line x1="250" y1="215" x2="250" y2="235" stroke="rgba(0,87,255,0.4)" stroke-width="1.5" stroke-dasharray="4 3">
+          <animate attributeName="stroke-dashoffset" values="0;-14" dur="2.3s" repeatCount="indefinite"/>
+        </line>
+        <line x1="350" y1="215" x2="350" y2="235" stroke="rgba(0,87,255,0.4)" stroke-width="1.5" stroke-dasharray="4 3">
+          <animate attributeName="stroke-dashoffset" values="0;-14" dur="1.8s" repeatCount="indefinite"/>
+        </line>
+
+        <!-- Compute layer -->
+        <rect x="40" y="235" width="125" height="55" rx="8" fill="rgba(0,87,255,0.08)" stroke="rgba(0,87,255,0.25)" stroke-width="1"/>
+        <text x="55" y="257" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.4)">CONTAINERS</text>
+        <text x="55" y="272" font-family="Syne, sans-serif" font-size="12" fill="rgba(255,255,255,0.8)" font-weight="700">Kubernetes</text>
+
+        <rect x="187" y="235" width="125" height="55" rx="8" fill="rgba(0,87,255,0.08)" stroke="rgba(0,87,255,0.25)" stroke-width="1"/>
+        <text x="202" y="257" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.4)">SERVERLESS</text>
+        <text x="202" y="272" font-family="Syne, sans-serif" font-size="12" fill="rgba(255,255,255,0.8)" font-weight="700">Functions</text>
+
+        <rect x="334" y="235" width="125" height="55" rx="8" fill="rgba(0,87,255,0.08)" stroke="rgba(0,87,255,0.25)" stroke-width="1"/>
+        <text x="349" y="257" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.4)">DATA LAYER</text>
+        <text x="349" y="272" font-family="Syne, sans-serif" font-size="12" fill="rgba(255,255,255,0.8)" font-weight="700">Analytics</text>
+
+        <!-- Bottom -->
+        <line x1="250" y1="290" x2="250" y2="310" stroke="rgba(0,229,160,0.4)" stroke-width="1.5" stroke-dasharray="4 3">
+          <animate attributeName="stroke-dashoffset" values="0;-14" dur="2s" repeatCount="indefinite"/>
+        </line>
+
+        <rect x="40" y="330" width="420" height="50" rx="8" fill="rgba(0,229,160,0.06)" stroke="rgba(0,229,160,0.2)" stroke-width="1"/>
+        <text x="55" y="351" font-family="DM Sans, sans-serif" font-size="11" fill="rgba(255,255,255,0.4)" font-weight="500">SECURITY &amp; COMPLIANCE LAYER</text>
+        <text x="55" y="368" font-family="DM Sans, sans-serif" font-size="10" fill="#00E5A0">SOC2 · ISO 27001 · GDPR · HIPAA · FedRAMP</text>
+
+        <!-- Glow effect -->
+        <ellipse cx="250" cy="380" rx="200" ry="40" fill="url(#glow-grad)" opacity="0.15"/>
+        <defs>
+          <radialGradient id="glow-grad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#0057FF"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ── TICKER ── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner" id="ticker">
+    <!-- Items duplicated for infinite loop -->
+    <span class="ticker-item"><span class="ticker-dot"></span>Digital Transformation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Managed Cloud Services</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Cloud Architecture</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>DevSecOps</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AI / ML Integration</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Cost Optimization</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Multi-Cloud Strategy</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>24/7 Operations</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Digital Transformation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Managed Cloud Services</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Cloud Architecture</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>DevSecOps</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AI / ML Integration</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Cost Optimization</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Multi-Cloud Strategy</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>24/7 Operations</span>
+  </div>
+</div>
+
+<!-- ── METRICS ── -->
+<div style="background: var(--c-bg);">
+  <div class="metrics">
+    <div class="metric-card fade-up">
+      <div class="metric-number">340+</div>
+      <div class="metric-label">Enterprise cloud migrations completed globally</div>
+    </div>
+    <div class="metric-card fade-up" style="transition-delay:0.1s">
+      <div class="metric-number">62%</div>
+      <div class="metric-label">Average infrastructure cost reduction for clients</div>
+    </div>
+    <div class="metric-card fade-up" style="transition-delay:0.2s">
+      <div class="metric-number">99.97%</div>
+      <div class="metric-label">Uptime SLA maintained across managed workloads</div>
+    </div>
+    <div class="metric-card fade-up" style="transition-delay:0.3s">
+      <div class="metric-number">18mo</div>
+      <div class="metric-label">Average time to measurable transformation ROI</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SERVICES ── -->
+<section class="section services-bg" id="services">
+  <div class="section-inner">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">End-to-End Cloud &amp;<br>Transformation Services</h2>
+    <p class="section-desc">From strategy through execution, CloudCore Global delivers the expertise and technology to move your enterprise forward — faster.</p>
+
+    <div class="services-grid">
+      <div class="service-card fade-up">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <div class="service-title">Digital Transformation Strategy</div>
+        <div class="service-desc">We assess your current state, define your cloud-native target architecture, and build a phased roadmap that aligns technology investment with business outcomes.</div>
+        <a href="#contact" class="service-link">Learn More →</a>
+      </div>
+
+      <div class="service-card fade-up" style="transition-delay:0.1s">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 9l3 3 5-5"/></svg>
+        </div>
+        <div class="service-title">Managed Cloud Services</div>
+        <div class="service-desc">24/7 monitoring, incident response, patching, and optimization across AWS, Azure, and Google Cloud — so your team focuses on innovation, not infrastructure upkeep.</div>
+        <a href="#contact" class="service-link">Learn More →</a>
+      </div>
+
+      <div class="service-card fade-up" style="transition-delay:0.2s">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        </div>
+        <div class="service-title">Cloud Migration &amp; Modernization</div>
+        <div class="service-desc">Lift-and-shift, replatforming, or full rearchitecting — we execute migrations with zero downtime and measurable performance improvements from day one.</div>
+        <a href="#contact" class="service-link">Learn More →</a>
+      </div>
+
+      <div class="service-card fade-up" style="transition-delay:0.05s">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="service-title">Cloud Security &amp; Compliance</div>
+        <div class="service-desc">Zero-trust architecture, identity management, and continuous compliance monitoring for SOC 2, ISO 27001, HIPAA, PCI-DSS, and FedRAMP frameworks.</div>
+        <a href="#contact" class="service-link">Learn More →</a>
+      </div>
+
+      <div class="service-card fade-up" style="transition-delay:0.15s">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <div class="service-title">Data &amp; AI Enablement</div>
+        <div class="service-desc">Build modern data platforms, lakehouse architectures, and production ML pipelines that transform raw data into competitive intelligence and automated decisions.</div>
+        <a href="#contact" class="service-link">Learn More →</a>
+      </div>
+
+      <div class="service-card fade-up" style="transition-delay:0.25s">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <div class="service-title">DevSecOps &amp; Platform Engineering</div>
+        <div class="service-desc">CI/CD pipelines, infrastructure-as-code, golden-path developer platforms, and integrated security gates that ship faster with less risk.</div>
+        <a href="#contact" class="service-link">Learn More →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── APPROACH ── -->
+<section class="section" id="approach">
+  <div class="section-inner">
+    <div class="approach-grid">
+      <div>
+        <div class="section-label">How We Work</div>
+        <h2 class="section-title">Built for Speed.<br>Engineered to Last.</h2>
+        <p class="section-desc" style="margin-bottom: 40px;">Our proven transformation framework reduces risk while accelerating time-to-value — designed for enterprises that can't afford long, waterfall-style programs.</p>
+
+        <div class="steps-list">
+          <div class="step fade-up">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <h4>Discovery &amp; Assessment</h4>
+              <p>Deep-dive into your current architecture, processes, and business goals. We map technical debt, identify quick wins, and quantify transformation ROI.</p>
+            </div>
+          </div>
+          <div class="step fade-up" style="transition-delay:0.1s">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <h4>Architecture &amp; Roadmap</h4>
+              <p>Design your target-state cloud architecture with phased implementation milestones, cost models, and risk mitigation strategies baked in from day one.</p>
+            </div>
+          </div>
+          <div class="step fade-up" style="transition-delay:0.2s">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <h4>Accelerated Delivery</h4>
+              <p>Sprint-based execution with embedded cloud engineers working alongside your teams — shipping value every two weeks, not every two years.</p>
+            </div>
+          </div>
+          <div class="step fade-up" style="transition-delay:0.3s">
+            <div class="step-num">04</div>
+            <div class="step-content">
+              <h4>Operate &amp; Optimize</h4>
+              <p>Post-launch managed services, continuous cost optimization, and quarterly business reviews to ensure your cloud investment keeps compounding.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="approach-visual fade-up">
+        <div class="approach-card">
+          <div style="font-family:var(--font-head); font-size:14px; font-weight:700; color:var(--c-muted); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:28px;">Transformation Outcomes</div>
+          <div class="result-items">
+            <div class="result-item">
+              <div class="result-icon green">🚀</div>
+              <div class="result-text">
+                <strong>3–5× Faster Time to Market</strong>
+                <span>Modern CI/CD pipelines reduce deployment cycles from weeks to hours</span>
+              </div>
+            </div>
+            <div class="result-item">
+              <div class="result-icon blue">💸</div>
+              <div class="result-text">
+                <strong>40–70% Infrastructure Cost Reduction</strong>
+                <span>Right-sizing, reserved capacity, and FinOps discipline drive sustained savings</span>
+              </div>
+            </div>
+            <div class="result-item">
+              <div class="result-icon gold">🛡️</div>
+              <div class="result-text">
+                <strong>99.97% Uptime SLA</strong>
+                <span>Multi-region failover, chaos engineering, and 24/7 NOC operations</span>
+              </div>
+            </div>
+            <div class="result-item">
+              <div class="result-icon green">📊</div>
+              <div class="result-text">
+                <strong>Real-Time Business Intelligence</strong>
+                <span>Unified data platforms delivering insights from all operational systems</span>
+              </div>
+            </div>
+            <div class="result-item">
+              <div class="result-icon blue">🔒</div>
+              <div class="result-text">
+                <strong>Zero-Trust Security Posture</strong>
+                <span>Continuous compliance monitoring with automated remediation workflows</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── INDUSTRIES ── -->
+<section class="section industries-bg" id="industries">
+  <div class="section-inner">
+    <div class="section-label">Sectors We Serve</div>
+    <h2 class="section-title">Deep Industry Expertise</h2>
+    <p class="section-desc">We bring domain knowledge to cloud transformation — understanding the regulatory, operational, and competitive nuances of your sector.</p>
+
+    <div class="industries-grid">
+      <div class="industry-card fade-up">
+        <div class="industry-icon">🏦</div>
+        <div class="industry-name">Financial Services</div>
+        <div class="industry-desc">Core banking modernization, real-time payments infrastructure, and regulatory compliance automation for banks, fintechs, and insurers.</div>
+      </div>
+      <div class="industry-card fade-up" style="transition-delay:0.1s">
+        <div class="industry-icon">🏥</div>
+        <div class="industry-name">Healthcare &amp; Life Sciences</div>
+        <div class="industry-desc">HIPAA-compliant cloud platforms, clinical data pipelines, and AI-powered diagnostics infrastructure for health systems and pharma.</div>
+      </div>
+      <div class="industry-card fade-up" style="transition-delay:0.15s">
+        <div class="industry-icon">🏭</div>
+        <div class="industry-name">Manufacturing &amp; Supply Chain</div>
+        <div class="industry-desc">IoT integration, digital twin deployments, and edge computing architectures that connect factory floors to cloud analytics in real time.</div>
+      </div>
+      <div class="industry-card fade-up" style="transition-delay:0.2s">
+        <div class="industry-icon">🛒</div>
+        <div class="industry-name">Retail &amp; eCommerce</div>
+        <div class="industry-desc">Scalable commerce platforms, personalization engines, and omnichannel data architectures that grow seamlessly from startup to enterprise.</div>
+      </div>
+      <div class="industry-card fade-up" style="transition-delay:0.05s">
+        <div class="industry-icon">🏛️</div>
+        <div class="industry-name">Government &amp; Public Sector</div>
+        <div class="industry-desc">FedRAMP-authorized cloud migrations, citizen digital services, and mission-critical infrastructure modernization for federal and state agencies.</div>
+      </div>
+      <div class="industry-card fade-up" style="transition-delay:0.15s">
+        <div class="industry-icon">📡</div>
+        <div class="industry-name">Telecom &amp; Media</div>
+        <div class="industry-desc">5G edge cloud, streaming platform engineering, and BSS/OSS modernization for telcos and media companies navigating rapid industry change.</div>
+      </div>
+      <div class="industry-card fade-up" style="transition-delay:0.2s">
+        <div class="industry-icon">✈️</div>
+        <div class="industry-name">Travel &amp; Logistics</div>
+        <div class="industry-desc">Real-time fleet management, dynamic pricing engines, and resilient booking platforms built for the operational demands of global logistics.</div>
+      </div>
+      <div class="industry-card fade-up" style="transition-delay:0.25s">
+        <div class="industry-icon">⚡</div>
+        <div class="industry-name">Energy &amp; Utilities</div>
+        <div class="industry-desc">Smart grid integration, predictive maintenance ML, and operational technology cloud connectivity for energy producers and utilities.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESULTS ── -->
+<section class="section" id="results">
+  <div class="section-inner">
+    <div class="section-label">Proven Results</div>
+    <h2 class="section-title">Transformation at Scale</h2>
+    <p class="section-desc">Real outcomes from real engagements. Our clients don't just migrate — they compound advantage.</p>
+
+    <div class="results-grid">
+      <div class="result-card fade-up">
+        <div class="result-card-accent"></div>
+        <span class="result-tag">Financial Services</span>
+        <div class="result-stat">68%</div>
+        <div class="result-desc">Reduction in infrastructure operating costs for a Tier-1 regional bank following full AWS migration and FinOps program implementation.</div>
+        <div class="result-client">Regional Banking Group · 18-Month Engagement</div>
+      </div>
+
+      <div class="result-card fade-up" style="transition-delay:0.1s">
+        <div class="result-card-accent"></div>
+        <span class="result-tag">Healthcare</span>
+        <div class="result-stat">4×</div>
+        <div class="result-desc">Increase in data pipeline throughput for a national health system, enabling real-time clinical analytics across 47 hospital facilities.</div>
+        <div class="result-client">National Health System · 24-Month Program</div>
+      </div>
+
+      <div class="result-card fade-up" style="transition-delay:0.2s">
+        <div class="result-card-accent"></div>
+        <span class="result-tag">Retail &amp; eCommerce</span>
+        <div class="result-stat">11min</div>
+        <div class="result-desc">Deployment cycle time — down from 3 weeks — achieved through GitOps and Kubernetes platform engineering for a global retail brand.</div>
+        <div class="result-client">Global Retail Brand · 12-Month Engagement</div>
+      </div>
+
+      <div class="result-card fade-up">
+        <div class="result-card-accent"></div>
+        <span class="result-tag">Manufacturing</span>
+        <div class="result-stat">$42M</div>
+        <div class="result-desc">Annual savings from predictive maintenance ML models deployed at the edge across 12 manufacturing facilities, reducing unplanned downtime by 81%.</div>
+        <div class="result-client">Automotive OEM · 36-Month Program</div>
+      </div>
+
+      <div class="result-card fade-up" style="transition-delay:0.1s">
+        <div class="result-card-accent"></div>
+        <span class="result-tag">Government</span>
+        <div class="result-stat">FedRAMP</div>
+        <div class="result-desc">Authorization achieved in under 9 months for a federal agency cloud platform — 40% faster than the industry average for similar scope engagements.</div>
+        <div class="result-client">U.S. Federal Agency · 9-Month Authorization</div>
+      </div>
+
+      <div class="result-card fade-up" style="transition-delay:0.2s">
+        <div class="result-card-accent"></div>
+        <span class="result-tag">Telecom</span>
+        <div class="result-stat">99.99%</div>
+        <div class="result-desc">Uptime maintained through BSS/OSS platform re-architecture and multi-region active-active failover design for a Tier-2 telecom operator.</div>
+        <div class="result-client">Telecom Operator · 20-Month Modernization</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── YOUTUBE ── -->
+<section class="section youtube-bg" id="youtube">
+  <div class="section-inner">
+
+    <div class="yt-header">
+      <div>
+        <div class="section-label">CloudCore on YouTube</div>
+        <h2 class="section-title">Learn Cloud. Build Better.<br>Watch Us Work.</h2>
+        <p class="section-desc" style="margin-top:12px;">Weekly Azure tutorials, DevOps deep-dives, Infrastructure-as-Code demos, and cloud cost optimization walkthroughs — straight from our engineers.</p>
+      </div>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew?sub_confirmation=1" target="_blank" rel="noopener" class="yt-subscribe">
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="white"><path d="M19.6 2.2A2.5 2.5 0 0017.8.4C16.3 0 10 0 10 0S3.7 0 2.2.4A2.5 2.5 0 00.4 2.2C0 3.7 0 7 0 7s0 3.3.4 4.8A2.5 2.5 0 002.2 13.6C3.7 14 10 14 10 14s6.3 0 7.8-.4a2.5 2.5 0 001.8-1.8C20 10.3 20 7 20 7s0-3.3-.4-4.8zM8 10V4l5.3 3L8 10z"/></svg>
+        Subscribe on YouTube
+      </a>
+    </div>
+
+    <!-- Featured Video -->
+    <div class="yt-featured fade-up">
+      <div class="yt-embed-wrap" id="featured-player" onclick="loadFeatured()" style="cursor:pointer;">
+        <img
+          src="https://i.ytimg.com/vi/U7KVyk9b0k4/maxresdefault.jpg"
+          alt="CloudCore — Latest Video"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;"
+          onerror="this.src='https://i.ytimg.com/vi/U7KVyk9b0k4/hqdefault.jpg'"
+        >
+        <!-- Play button overlay -->
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.25);transition:background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.1)'" onmouseout="this.style.background='rgba(0,0,0,0.25)'">
+          <div style="width:72px;height:72px;background:#FF0000;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(255,0,0,0.5);">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="white"><path d="M6 4l18 10L6 24V4z"/></svg>
+          </div>
+        </div>
+        <!-- Duration badge -->
+        <div style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;font-weight:600;padding:3px 8px;border-radius:4px;font-family:var(--font-body);">Click to play</div>
+      </div>
+
+      <div class="yt-featured-info">
+        <div class="yt-featured-label">▶ Latest from the Channel</div>
+        <div class="yt-featured-title">Azure & CloudOps — Real-World Tutorials from CloudCore Engineers</div>
+        <div class="yt-featured-desc">Our team publishes weekly hands-on content covering the tools and techniques we use every day on enterprise cloud engagements — from Bicep templates to Azure Monitor and Defender configurations.</div>
+
+        <div class="yt-channel-stats">
+          <div class="yt-stat">
+            <div class="yt-stat-num">Weekly</div>
+            <div class="yt-stat-label">New Videos</div>
+          </div>
+          <div class="yt-stat">
+            <div class="yt-stat-num">Azure</div>
+            <div class="yt-stat-label">Primary Focus</div>
+          </div>
+          <div class="yt-stat">
+            <div class="yt-stat-num">IaC</div>
+            <div class="yt-stat-label">Bicep · Terraform</div>
+          </div>
+        </div>
+
+        <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-watch-btn">
+          View All Videos
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Video Grid — 3 topic cards with embedded previews -->
+    <div class="yt-grid">
+
+      <a href="https://www.youtube.com/watch?v=FXV1w53DgF8" target="_blank" rel="noopener" class="yt-card fade-up">
+        <div class="yt-thumb">
+          <img src="https://i.ytimg.com/vi/FXV1w53DgF8/mqdefault.jpg" alt="Infrastructure as Code" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.ytimg.com/vi/FXV1w53DgF8/hqdefault.jpg'">
+          <div class="yt-thumb-overlay">
+            <div class="yt-play-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="yt-card-body">
+          <div class="yt-card-topic">Infrastructure as Code</div>
+          <div class="yt-card-title">Bicep & Terraform Deep Dives</div>
+          <div class="yt-card-desc">Deploy repeatable, version-controlled Azure infrastructure with hands-on IaC walkthroughs.</div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=GVo2-d3G2aw" target="_blank" rel="noopener" class="yt-card fade-up" style="transition-delay:0.1s">
+        <div class="yt-thumb">
+          <img src="https://i.ytimg.com/vi/GVo2-d3G2aw/mqdefault.jpg" alt="DevOps & CI/CD" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.ytimg.com/vi/GVo2-d3G2aw/hqdefault.jpg'">
+          <div class="yt-thumb-overlay">
+            <div class="yt-play-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="yt-card-body">
+          <div class="yt-card-topic">DevOps & CI/CD</div>
+          <div class="yt-card-title">Azure DevOps Pipeline Tutorials</div>
+          <div class="yt-card-desc">End-to-end CI/CD pipeline builds using Azure DevOps, GitHub Actions, and GitOps workflows.</div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=50eEZIMSD8U" target="_blank" rel="noopener" class="yt-card fade-up" style="transition-delay:0.2s">
+        <div class="yt-thumb">
+          <img src="https://i.ytimg.com/vi/50eEZIMSD8U/mqdefault.jpg" alt="Cloud Security" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.ytimg.com/vi/50eEZIMSD8U/hqdefault.jpg'">
+          <div class="yt-thumb-overlay">
+            <div class="yt-play-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="yt-card-body">
+          <div class="yt-card-topic">Security & Compliance</div>
+          <div class="yt-card-title">Azure Defender & Monitor Configs</div>
+          <div class="yt-card-desc">Practical security posture management, threat detection, and compliance automation on Azure.</div>
+        </div>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=Ghn04pMLSDc" target="_blank" rel="noopener" class="yt-card fade-up" style="transition-delay:0.3s">
+        <div class="yt-thumb">
+          <img src="https://i.ytimg.com/vi/Ghn04pMLSDc/mqdefault.jpg" alt="Cloud Operations" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.src='https://i.ytimg.com/vi/Ghn04pMLSDc/hqdefault.jpg'">
+          <div class="yt-thumb-overlay">
+            <div class="yt-play-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="yt-card-body">
+          <div class="yt-card-topic">Cloud Operations</div>
+          <div class="yt-card-title">Azure CloudOps Walkthrough</div>
+          <div class="yt-card-desc">Real-world cloud operations patterns, monitoring setups, and automation workflows on Azure.</div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Topic Pills -->
+    <div class="yt-topics">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-muted);align-self:center;margin-right:8px;">Topics:</span>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Azure Infrastructure</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Bicep Templates</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Terraform on Azure</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">CI/CD Pipelines</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Azure Monitor</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Cloud Security</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">Cost Optimization</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">DevOps Best Practices</a>
+      <a href="https://www.youtube.com/channel/UCd4ZHTniPSOgIv0hMkhV2ew" target="_blank" rel="noopener" class="yt-topic-pill">ARM Templates</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="section contact-bg" id="contact">
+  <div class="section-inner">
+    <div class="section-label">Get Started</div>
+    <h2 class="section-title">Let's Build Your<br>Cloud Strategy</h2>
+
+    <div class="contact-grid">
+      <div class="contact-info fade-up">
+        <h3>Talk to a CloudCore Global Expert</h3>
+        <p>Whether you're early in your cloud journey or optimizing an existing environment, our team will help you identify the highest-value opportunities and build a clear path forward. No sales pitch — just a technical conversation.</p>
+
+        <div class="contact-details">
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 4 4.5 8.5 4.5 8.5S12.5 10 12.5 6c0-2.5-2-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+            </div>
+            Global HQ: Tampa Bay, Florida &amp; Distributed
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"><path d="M2 4a1 1 0 011-1h10a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V4z"/><path d="M2 4l6 5 6-5"/></svg>
+            </div>
+            hello@ccglobal.ai
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l3 2"/></svg>
+            </div>
+            Response within 1 business day
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg>
+            </div>
+            Free 90-minute Discovery Workshop
+          </div>
+        </div>
+
+        <!-- Trust bar -->
+        <div style="margin-top:44px; padding-top:32px; border-top:1px solid var(--c-border);">
+          <div style="font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--c-muted); margin-bottom:16px;">Certified Partner Ecosystem</div>
+          <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+            <div style="background:var(--c-surface2); border:1px solid var(--c-border); border-radius:6px; padding:8px 14px; font-size:12px; font-weight:700; color:rgba(255,255,255,0.5);">AWS Premier</div>
+            <div style="background:var(--c-surface2); border:1px solid var(--c-border); border-radius:6px; padding:8px 14px; font-size:12px; font-weight:700; color:rgba(255,255,255,0.5);">Azure Expert MSP</div>
+            <div style="background:var(--c-surface2); border:1px solid var(--c-border); border-radius:6px; padding:8px 14px; font-size:12px; font-weight:700; color:rgba(255,255,255,0.5);">GCP Partner</div>
+            <div style="background:var(--c-surface2); border:1px solid var(--c-border); border-radius:6px; padding:8px 14px; font-size:12px; font-weight:700; color:rgba(255,255,255,0.5);">Cloudflare Partner</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-up" style="transition-delay:0.15s">
+        <div class="contact-form">
+          <!-- Form content -->
+          <div id="form-wrapper">
+            <h3>Start the Conversation</h3>
+            <p>Tell us about your transformation goals — a specialist will reach out within 24 hours.</p>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fname">First Name *</label>
+                <input type="text" id="fname" placeholder="Jane" required>
+              </div>
+              <div class="form-group">
+                <label for="lname">Last Name *</label>
+                <input type="text" id="lname" placeholder="Smith" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Work Email *</label>
+                <input type="email" id="email" placeholder="jane.smith@company.com" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" placeholder="+1 (555) 000-0000" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="company">Company *</label>
+                <input type="text" id="company" placeholder="Acme Corp" required>
+              </div>
+              <div class="form-group">
+                <label for="title">Job Title</label>
+                <input type="text" id="title" placeholder="VP of Engineering">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="size">Company Size</label>
+                <select id="size">
+                  <option value="" disabled selected>Select range</option>
+                  <option>1–50 employees</option>
+                  <option>51–200 employees</option>
+                  <option>201–1,000 employees</option>
+                  <option>1,001–5,000 employees</option>
+                  <option>5,000+ employees</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="timeline">Timeline</label>
+                <select id="timeline">
+                  <option value="" disabled selected>Select timeline</option>
+                  <option>Within 1 month</option>
+                  <option>1–3 months</option>
+                  <option>3–6 months</option>
+                  <option>6–12 months</option>
+                  <option>Exploring / No urgency</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="service">Primary Service Interest *</label>
+              <select id="service" required>
+                <option value="" disabled selected>Select a service area</option>
+                <option>Digital Transformation Strategy</option>
+                <option>Managed Cloud Services</option>
+                <option>Cloud Migration &amp; Modernization</option>
+                <option>Cloud Security &amp; Compliance</option>
+                <option>Data &amp; AI Enablement</option>
+                <option>DevSecOps &amp; Platform Engineering</option>
+                <option>Not sure — need guidance</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Tell Us About Your Challenge</label>
+              <textarea id="message" placeholder="Briefly describe your current environment, key challenges, or transformation goals..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="budget">Estimated Annual Cloud Budget</label>
+              <select id="budget">
+                <option value="" disabled selected>Select range (optional)</option>
+                <option>Under $100K</option>
+                <option>$100K – $500K</option>
+                <option>$500K – $2M</option>
+                <option>$2M – $10M</option>
+                <option>$10M+</option>
+                <option>Prefer not to say</option>
+              </select>
+            </div>
+
+            <div class="form-check">
+              <input type="checkbox" id="consent" required>
+              <label for="consent">I agree to CloudCore Global's <a href="/privacy.html" style="color:var(--c-accent);">Privacy Policy</a> and consent to being contacted about my inquiry. I can opt out at any time.</label>
+            </div>
+
+            <button type="button" class="form-submit" onclick="submitForm()">
+              Request Free Discovery Workshop →
+            </button>
+            <p class="form-note">🔒 Your information is secure and will never be sold or shared with third parties.</p>
+          </div>
+
+          <!-- Success state -->
+          <div class="form-success" id="form-success">
+            <div class="success-icon">✓</div>
+            <h4>Request Received!</h4>
+            <p>A CloudCore Global specialist will reach out within 1 business day to schedule your free 90-minute Discovery Workshop. Check your email for a confirmation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="text-decoration:none;">
+          <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="40" rx="8" fill="url(#f-logo-bg)"/>
+            <path d="M20 8C13.373 8 8 13.373 8 20C8 26.627 13.373 32 20 32" stroke="#00D4FF" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M20 8C26.627 8 32 13.373 32 20C32 26.627 26.627 32 20 32" stroke="url(#f-logo-grad)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="20" cy="20" r="4" fill="#00D4FF"/>
+            <defs>
+              <linearGradient id="f-logo-bg" x1="0" y1="0" x2="40" y2="40">
+                <stop offset="0%" stop-color="#0C1524"/><stop offset="100%" stop-color="#071120"/>
+              </linearGradient>
+              <linearGradient id="f-logo-grad" x1="20" y1="8" x2="32" y2="32">
+                <stop offset="0%" stop-color="#0057FF"/><stop offset="100%" stop-color="#00D4FF"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="nav-wordmark" style="font-size:16px;">CloudCore <span>Global</span></div>
+        </a>
+        <p>Architecting the cloud-native future for enterprises worldwide. Strategy, execution, and operations — under one roof.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#services">Digital Transformation</a></li>
+          <li><a href="#services">Managed Cloud</a></li>
+          <li><a href="#services">Cloud Migration</a></li>
+          <li><a href="#services">Security &amp; Compliance</a></li>
+          <li><a href="#services">Data &amp; AI</a></li>
+          <li><a href="#services">DevSecOps</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Industries</h5>
+        <ul>
+          <li><a href="#industries">Financial Services</a></li>
+          <li><a href="#industries">Healthcare</a></li>
+          <li><a href="#industries">Manufacturing</a></li>
+          <li><a href="#industries">Government</a></li>
+          <li><a href="#industries">Retail</a></li>
+          <li><a href="#industries">Telecom</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#approach">Our Approach</a></li>
+          <li><a href="#results">Case Studies</a></li>
+          <li><a href="#youtube">YouTube Channel</a></li>
+          <li><a href="/blog.html">Blog</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 CloudCore Global. All rights reserved. · <a href="https://ccglobal.ai" style="color:inherit;">ccglobal.ai</a></span>
+      <span>AWS Premier Partner · Azure Expert MSP · Google Cloud Partner</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── FADE-UP INTERSECTION OBSERVER ──
+  // Mark all fade-up elements visible on load as failsafe
+  function revealAll() {
+    document.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
+  }
+
+  // Try IntersectionObserver first, fall back to revealAll
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Hard failsafe: if anything still invisible after 2s, reveal it
+    setTimeout(() => {
+      document.querySelectorAll('.fade-up:not(.visible)').forEach(el => {
+        el.classList.add('visible');
+      });
+    }, 2000);
+  } else {
+    revealAll();
+  }
