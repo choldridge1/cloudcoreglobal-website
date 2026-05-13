@@ -207,15 +207,132 @@
     padding: 64px 40px 100px;
   }
 
-  /* Soro embed override styles */
+  /* ── SORO DARK THEME OVERRIDES ── */
   #soro-blog {
     width: 100%;
     min-height: 600px;
   }
 
-  /* Style the Soro embed to blend with dark theme */
-  #soro-blog * {
+  /* Force all Soro text to be light */
+  #soro-blog,
+  #soro-blog *,
+  #soro-blog p,
+  #soro-blog h1,
+  #soro-blog h2,
+  #soro-blog h3,
+  #soro-blog h4,
+  #soro-blog h5,
+  #soro-blog h6,
+  #soro-blog span,
+  #soro-blog div,
+  #soro-blog a,
+  #soro-blog li,
+  #soro-blog td,
+  #soro-blog th,
+  #soro-blog label,
+  #soro-blog strong,
+  #soro-blog em {
+    color: #E8EDF5 !important;
     font-family: var(--font-body) !important;
+  }
+
+  /* Links in accent color */
+  #soro-blog a,
+  #soro-blog a * {
+    color: #00D4FF !important;
+  }
+  #soro-blog a:hover,
+  #soro-blog a:hover * {
+    color: #ffffff !important;
+    text-decoration: underline;
+  }
+
+  /* Dark backgrounds on cards/containers */
+  #soro-blog [class*="card"],
+  #soro-blog [class*="post"],
+  #soro-blog [class*="article"],
+  #soro-blog [class*="item"],
+  #soro-blog [class*="blog"],
+  #soro-blog [class*="container"],
+  #soro-blog [class*="wrapper"],
+  #soro-blog [class*="box"],
+  #soro-blog [class*="panel"],
+  #soro-blog [class*="content"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-color: rgba(255,255,255,0.08) !important;
+  }
+
+  /* Remove any white/light backgrounds injected by Soro */
+  #soro-blog [style*="background: #fff"],
+  #soro-blog [style*="background:#fff"],
+  #soro-blog [style*="background: white"],
+  #soro-blog [style*="background-color: #fff"],
+  #soro-blog [style*="background-color:#fff"],
+  #soro-blog [style*="background-color: white"],
+  #soro-blog [style*="background-color: rgb(255"],
+  #soro-blog [style*="color: #000"],
+  #soro-blog [style*="color:#000"],
+  #soro-blog [style*="color: black"],
+  #soro-blog [style*="color: rgb(0"],
+  #soro-blog [style*="color: #333"],
+  #soro-blog [style*="color: #222"],
+  #soro-blog [style*="color: #111"],
+  #soro-blog [style*="color: #444"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #E8EDF5 !important;
+  }
+
+  /* Muted/secondary text stays slightly dimmer but still readable */
+  #soro-blog [class*="meta"],
+  #soro-blog [class*="date"],
+  #soro-blog [class*="author"],
+  #soro-blog [class*="tag"],
+  #soro-blog [class*="category"],
+  #soro-blog [class*="subtitle"],
+  #soro-blog [class*="description"],
+  #soro-blog [class*="excerpt"] {
+    color: #7A8DA8 !important;
+  }
+
+  /* Tags/badges */
+  #soro-blog [class*="tag"],
+  #soro-blog [class*="badge"],
+  #soro-blog [class*="label"],
+  #soro-blog [class*="chip"] {
+    background: rgba(0,212,255,0.1) !important;
+    border: 1px solid rgba(0,212,255,0.2) !important;
+    color: #00D4FF !important;
+  }
+
+  /* Buttons */
+  #soro-blog button,
+  #soro-blog [class*="btn"],
+  #soro-blog [class*="button"] {
+    background: linear-gradient(135deg, #0057FF, #00D4FF) !important;
+    color: #fff !important;
+    border: none !important;
+  }
+
+  /* Images keep natural colors */
+  #soro-blog img {
+    opacity: 1 !important;
+    border-radius: 8px;
+  }
+
+  /* Horizontal rules */
+  #soro-blog hr {
+    border-color: rgba(255,255,255,0.08) !important;
+  }
+
+  /* Input fields if any */
+  #soro-blog input,
+  #soro-blog textarea,
+  #soro-blog select {
+    background: #0C1524 !important;
+    color: #E8EDF5 !important;
+    border-color: rgba(255,255,255,0.08) !important;
   }
 
   /* ── NEWSLETTER CTA ── */
@@ -485,4 +602,3 @@
 
 </body>
 </html>
-
